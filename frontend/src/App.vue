@@ -2,7 +2,10 @@
   <div class="min-h-screen flex flex-col">
     <header class="border-b bg-background">
       <div class="container mx-auto px-4 h-16 flex justify-start items-center">
-        <div class="flex items-center gap-3 cursor-pointer" @click="router.push('/')">
+        <div
+          class="flex items-center gap-3 cursor-pointer"
+          @click="router.push('/')"
+        >
           <Globe class="h-6 w-6 text-primary" />
           <span class="text-xl font-semibold">Around the World</span>
         </div>
@@ -15,14 +18,29 @@
 
     <footer class="border-t py-6 md:py-0">
       <div class="container mx-auto px-4 flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
-        <p class="text-center text-sm text-muted-foreground">Made by <a href="https://railsmatic.com" class="underline underline-offset-4">bakku</a> and Claude in Upper Palatine.</p>
+        <p class="text-center text-sm text-muted-foreground">
+          Made by <a
+            href="https://railsmatic.com"
+            class="underline underline-offset-4"
+          >bakku</a> and Claude in Upper Palatine.
+        </p>
         <div class="flex gap-4">
-          <router-link to="/imprint" class="text-sm text-muted-foreground hover:text-foreground">Imprint</router-link>
-          <router-link to="/privacy" class="text-sm text-muted-foreground hover:text-foreground">Privacy Policy</router-link>
+          <router-link
+            to="/imprint"
+            class="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Imprint
+          </router-link>
+          <router-link
+            to="/privacy"
+            class="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Privacy Policy
+          </router-link>
         </div>
       </div>
     </footer>
-    
+
     <Toaster />
   </div>
 </template>
