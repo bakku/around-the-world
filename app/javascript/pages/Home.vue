@@ -8,7 +8,7 @@
         Track your progress in the dart game "Around the World"
       </p>
 
-      <div class="bg-card rounded-lg border shadow-sm p-8 max-w-3xl mx-auto">
+      <div class="bg-card rounded-lg border shadow-sm p-8 max-w-3xl mx-auto mb-8">
         <div class="bg-muted rounded-lg p-6 mb-8">
           <h2 class="text-2xl font-semibold mb-4">
             How to Play
@@ -23,17 +23,50 @@
 
         <div class="bg-muted rounded-lg p-6">
           <h2 class="text-2xl font-semibold mb-4">
-            Start Tracking
+            Start a New Game
           </h2>
           <p class="text-muted-foreground mb-4">
-            No account needed! Just click below to start tracking your game. You'll get a unique link to bookmark so you can return to view and update your scores anytime.
+            No account needed! Just click below to start a new game. You'll get a unique link to bookmark so you can return to view and update your scores anytime.
           </p>
           <Button
             class="w-full"
-            @click="startTracking"
+            @click="startGame"
           >
-            Start Tracking Now
+            Start New Game
           </Button>
+        </div>
+      </div>
+
+      <!-- Recent Games Section -->
+      <div
+        v-if="recentGames.length > 0"
+        class="bg-card rounded-lg border shadow-sm p-8 max-w-3xl mx-auto"
+      >
+        <h2 class="text-2xl font-semibold mb-4">
+          Recent Games
+        </h2>
+        <p class="text-muted-foreground mb-6">
+          Continue one of your recent games:
+        </p>
+
+        <div class="space-y-4">
+          <div
+            v-for="(game, index) in recentGames"
+            :key="game.id"
+            class="flex items-center justify-between p-4 border rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+            @click="continueGame(game.id)"
+          >
+            <div>
+              <div class="font-medium">
+                Game {{ index + 1 }}
+              </div>
+            </div>
+            <div class="flex flex-col items-end">
+              <div class="text-sm">
+                Last played: {{ formatDate(new Date(game.lastVisited)) }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -41,13 +74,43 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import { router } from "@inertiajs/vue3";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout.vue";
 
-const startTracking = () => {
-  // Generate a random tracking ID
-  const trackingId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-  router.get(`/games/${trackingId}`);
+// Define type for recent game data
+interface RecentGame {
+  id: string;
+  lastVisited: string;
+  bestScore: number | null;
+}
+
+const recentGames = ref<RecentGame[]>([]);
+
+onMounted(() => {
+  // Load recent games from localStorage
+  const savedGames = localStorage.getItem("atw_recent_games");
+  if (savedGames) {
+    recentGames.value = JSON.parse(savedGames);
+  }
+});
+
+const startGame = () => {
+  // Let the backend create the game and generate the UUID
+  router.post("/games");
+};
+
+const continueGame = (gameId: string) => {
+  router.get(`/games/${gameId}`);
+};
+
+// Format a date
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 };
 </script>

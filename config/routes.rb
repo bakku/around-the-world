@@ -9,5 +9,7 @@ Rails.application.routes.draw do
   get "imprint", to: "pages#imprint"
   get "privacy", to: "pages#privacy"
 
-  resources :games
+  resources :games, param: :key do
+    resources :rounds, only: [:create]
+  end
 end

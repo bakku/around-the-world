@@ -8,7 +8,7 @@ import stylistic from "@stylistic/eslint-plugin";
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs,ts,vue}"],
-    ignores: ["app/javascript/components/ui/**/*", "app/javascript/lib/utils.ts"],
+    ignores: ["app/javascript/components/ui/**/*", "app/javascript/lib/utils.ts", "public/**/*"],
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,

@@ -10,5 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_30_214536) do
+  create_table "games", force: :cascade do |t|
+    t.string "key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_games_on_key", unique: true
+  end
+
+  create_table "number_attempts", force: :cascade do |t|
+    t.integer "round_id", null: false
+    t.integer "target_number", null: false
+    t.integer "throws_needed", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["round_id", "target_number"], name: "index_number_attempts_on_round_id_and_target_number", unique: true
+    t.index ["round_id"], name: "index_number_attempts_on_round_id"
+  end
+
+  create_table "rounds", force: :cascade do |t|
+    t.integer "game_id", null: false
+    t.boolean "include_bulls_eye", default: false, null: false
+    t.string "required_multiplier", default: "singles", null: false
+    t.integer "total_throws", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_rounds_on_game_id"
+  end
+
+  add_foreign_key "number_attempts", "rounds"
+  add_foreign_key "rounds", "games"
 end
