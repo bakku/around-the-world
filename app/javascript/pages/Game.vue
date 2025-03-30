@@ -129,16 +129,16 @@
 
         <div class="bg-card rounded-lg border shadow-sm p-8">
           <h2 class="text-xl font-semibold mb-1">
-            Your High Scores
+            Your Rounds
           </h2>
           <p class="text-muted-foreground mb-4">
-            Showing scores matching your current game settings
+            Showing rounds with {{ requiredMultiplier }} {{ includeBullsEye ? 'with' : 'without' }} bulls eye
           </p>
           <div
-            v-if="filteredScores.length === 0"
+            v-if="filteredRounds.length === 0"
             class="text-center py-6 text-muted-foreground"
           >
-            No scores recorded yet for current settings. Complete a game to record your first score!
+            No rounds recorded with current settings. Complete a round with these settings to record your first score!
           </div>
           <div v-else>
             <div class="flex justify-between mb-2 px-4 py-2 text-sm text-muted-foreground">
@@ -147,20 +147,49 @@
             </div>
             <div class="space-y-2">
               <div
-                v-for="(score, index) in filteredScores"
-                :key="index"
-                class="flex items-center justify-between p-4 border rounded-md"
+                v-for="(round, index) in filteredRounds"
+                :key="round.id"
+                class="flex flex-col p-4 border rounded-md"
                 :class="{'bg-primary/5 border-primary/20': index === 0}"
               >
-                <div>
-                  <p class="text-sm text-muted-foreground">
-                    {{ formatDate(score.date) }}
-                  </p>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm text-muted-foreground">
+                      {{ formatDate(new Date(round.createdAt)) }}
+                    </p>
+                    <p class="text-xs text-muted-foreground">
+                      {{ round.requiredMultiplier }}, {{ round.includeBullsEye ? 'with' : 'without' }} bulls eye
+                    </p>
+                  </div>
+                  <div>
+                    <p class="text-xl font-bold">
+                      {{ round.totalThrows }}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p class="text-xl font-bold">
-                    {{ score.throws }}
+
+                <!-- Number attempts details (expandable) -->
+                <div
+                  v-if="round.numberAttempts && round.numberAttempts.length > 0"
+                  class="mt-3 pt-3 border-t"
+                >
+                  <p class="text-xs text-muted-foreground font-medium mb-2">
+                    Throws per number:
                   </p>
+                  <div class="grid grid-cols-5 gap-2">
+                    <div
+                      v-for="attempt in round.numberAttempts"
+                      :key="attempt.targetNumber"
+                      class="text-center p-1 rounded-md bg-muted/60"
+                    >
+                      <div class="text-xs font-medium">
+                        {{ displayTargetNumber(attempt.targetNumber) }}
+                      </div>
+                      <div class="text-sm font-bold">
+                        {{ attempt.throwsNeeded }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -193,7 +222,7 @@
               </div>
               <Switch
                 id="bulls-eye-switch"
-                v-model:checked="settingsForm.includeBullsEye"
+                v-model="settingsForm.includeBullsEye"
               />
             </div>
 
@@ -243,6 +272,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
+import { router } from "@inertiajs/vue3";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/toast/use-toast.ts";
@@ -271,7 +301,29 @@ import {
 } from "lucide-vue-next";
 import Layout from "@/components/Layout.vue";
 
-const props = defineProps<{ gameId: string; }>();
+interface NumberAttempt {
+  targetNumber: number;
+  throwsNeeded: number;
+}
+
+interface Round {
+  id: number;
+  includeBullsEye: boolean;
+  requiredMultiplier: string;
+  totalThrows: number;
+  createdAt: string;
+  numberAttempts: NumberAttempt[];
+}
+
+interface BestScores {
+  [key: string]: number;
+}
+
+const props = defineProps<{
+  gameId: string;
+  rounds?: Round[];
+  bestScore?: BestScores;
+}>();
 
 const { toast } = useToast();
 
@@ -295,12 +347,9 @@ const throwCount = ref(0);
 const gameFinished = ref(false);
 const includeBullsEye = ref(false);
 const requiredMultiplier = ref("singles");
-const scores = ref<{
-  date: Date;
-  throws: number;
-  includedBullsEye?: boolean;
-  requiredMultiplier?: string;
-}[]>([]);
+
+// Track attempts per number
+const numberAttempts = ref<{ [key: number]: number; }>({});
 // Computed to determine max number (20, 22, or 25 depending on settings)
 const maxNumber = computed(() => {
   return includeBullsEye.value ? 22 : 20;
@@ -313,58 +362,31 @@ const displayNumber = computed(() => {
   return currentNumber.value.toString();
 });
 
-// Filter scores based on current settings
-const filteredScores = computed(() => {
-  return scores.value.
-    filter((score) => (score.includedBullsEye || false) === includeBullsEye.value &&
-      (score.requiredMultiplier || "singles") === requiredMultiplier.value).
-    sort((a, b) => a.throws - b.throws);
-});
-
-// Get the best score based on filtered scores
+// Get the best score for the current settings
 const bestScore = computed(() => {
-  if (filteredScores.value.length === 0) return 0;
-  return filteredScores.value[0].throws;
+  if (!props.bestScore) return 0;
+
+  const settingsKey = `${includeBullsEye.value}-${requiredMultiplier.value}`;
+  return props.bestScore[settingsKey] || 0;
 });
 
-// Load data from localStorage
+// Filter rounds based on current settings
+const filteredRounds = computed(() => {
+  if (!props.rounds) return [];
+
+  return props.rounds.filter((round) => round.includeBullsEye === includeBullsEye.value &&
+    round.requiredMultiplier === requiredMultiplier.value);
+});
+
+// Initialize game
 onMounted(() => {
-  const savedState = localStorage.getItem(`atw_game_${props.gameId}`);
-  if (savedState) {
-    const state = JSON.parse(savedState);
-    currentNumber.value = state.currentNumber || 1;
-    throwCount.value = state.throwCount || 0;
-    gameFinished.value = state.gameFinished || false;
-    includeBullsEye.value = state.includeBullsEye || false;
-    requiredMultiplier.value = state.requiredMultiplier || "singles";
+  // Sync settings form with actual settings
+  settingsForm.value.includeBullsEye = includeBullsEye.value;
+  settingsForm.value.requiredMultiplier = requiredMultiplier.value;
 
-    // Sync settings form with actual settings
-    settingsForm.value.includeBullsEye = includeBullsEye.value;
-    settingsForm.value.requiredMultiplier = requiredMultiplier.value;
-  }
-
-  const savedScores = localStorage.getItem(`atw_scores_${props.gameId}`);
-  if (savedScores) {
-    // eslint-disable-next-line
-    scores.value = JSON.parse(savedScores).map((score: any) => ({
-      ...score,
-      date: new Date(score.date),
-    }));
-    // Sort scores by throws (lowest first)
-    scores.value.sort((a, b) => a.throws - b.throws);
-  }
+  // Save this game to recent games list
+  saveToRecentGames();
 });
-
-// Save state to localStorage
-const saveState = () => {
-  localStorage.setItem(`atw_game_${props.gameId}`, JSON.stringify({
-    currentNumber: currentNumber.value,
-    throwCount: throwCount.value,
-    gameFinished: gameFinished.value,
-    includeBullsEye: includeBullsEye.value,
-    requiredMultiplier: requiredMultiplier.value,
-  }));
-};
 
 // Open settings sheet
 const openSettings = () => {
@@ -382,40 +404,57 @@ const applySettings = () => {
   resetGame();
 };
 
-// Save scores to localStorage
-const saveScores = () => {
-  localStorage.setItem(`atw_scores_${props.gameId}`, JSON.stringify(scores.value));
-};
-
 // Handle hit
 const handleHit = () => {
+  // Increment the throwCount
   throwCount.value++;
+
+  // Track attempt for the current number
+  if (!numberAttempts.value[currentNumber.value]) {
+    numberAttempts.value[currentNumber.value] = 1;
+  } else {
+    numberAttempts.value[currentNumber.value]++;
+  }
+
+  // Move to the next number
   currentNumber.value++;
 
   // Check if game is finished based on settings
   if (currentNumber.value > maxNumber.value) {
     gameFinished.value = true;
 
-    // Record score
-    scores.value.push({
-      date: new Date(),
-      throws: throwCount.value,
-      includedBullsEye: includeBullsEye.value,
+    // Prepare data for the round
+    const roundData = {
+      includeBullsEye: includeBullsEye.value,
       requiredMultiplier: requiredMultiplier.value,
+      totalThrows: throwCount.value,
+      numberAttempts: Object.entries(numberAttempts.value).map(([targetNumber, throwsNeeded]) => ({
+        targetNumber: parseInt(targetNumber),
+        throwsNeeded,
+      })),
+    };
+
+    // Send data to the backend
+    router.post(`/games/${props.gameId}/rounds`, roundData, {
+      onSuccess: () => {
+        // Reload the page to refresh the rounds list
+        router.reload();
+      },
     });
-
-    // Sort scores by throws (lowest first)
-    scores.value.sort((a, b) => a.throws - b.throws);
-    saveScores();
   }
-
-  saveState();
 };
 
 // Handle miss
 const handleMiss = () => {
+  // Increment the throwCount
   throwCount.value++;
-  saveState();
+
+  // Track attempt for the current number
+  if (!numberAttempts.value[currentNumber.value]) {
+    numberAttempts.value[currentNumber.value] = 1;
+  } else {
+    numberAttempts.value[currentNumber.value]++;
+  }
 };
 
 // Reset the current game
@@ -423,7 +462,9 @@ const resetGame = () => {
   currentNumber.value = 1;
   throwCount.value = 0;
   gameFinished.value = false;
-  saveState();
+
+  // Initialize numberAttempts
+  numberAttempts.value = {};
 };
 
 // Start a new game after completion
@@ -436,7 +477,7 @@ const copyLinkToClipboard = () => {
   navigator.clipboard.writeText(window.location.href);
   toast({
     title: "Link copied!",
-    description: "The tracking link has been copied to your clipboard",
+    description: "The game link has been copied to your clipboard",
     variant: "default",
     class: "bg-green-50 border-green-200 text-green-800",
   });
@@ -449,5 +490,39 @@ const formatDate = (date: Date) => {
     month: "short",
     day: "numeric",
   });
+};
+
+// Helper for displaying target numbers (especially for bulls eye)
+const displayTargetNumber = (number: number) => {
+  if (number === 21) return "25";
+  if (number === 22) return "50";
+  return number.toString();
+};
+
+// Save this game to the recent games list in localStorage
+const saveToRecentGames = () => {
+  const recentGames = JSON.parse(localStorage.getItem("atw_recent_games") || "[]");
+
+  // Check if this game already exists in the recent games list
+  const gameIndex = recentGames.findIndex((game: { id: string; }) => game.id === props.gameId);
+
+  const gameData = {
+    id: props.gameId,
+    lastVisited: new Date().toISOString(),
+    bestScore: bestScore.value || null,
+  };
+
+  if (gameIndex !== -1) {
+    // Update existing game
+    recentGames[gameIndex] = { ...recentGames[gameIndex], ...gameData };
+  } else {
+    // Add new game
+    recentGames.unshift(gameData);
+  }
+
+  // Limit to 10 recent games
+  const limitedGames = recentGames.slice(0, 10);
+
+  localStorage.setItem("atw_recent_games", JSON.stringify(limitedGames));
 };
 </script>
