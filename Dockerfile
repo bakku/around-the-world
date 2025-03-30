@@ -2,8 +2,8 @@
 # check=error=true
 
 # This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t around_the_world .
-# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name around_the_world around_the_world
+# docker build -t atw .
+# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name atw atw
 
 # For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
 
@@ -45,7 +45,7 @@ RUN bundle install && \
     bundle exec bootsnap precompile --gemfile
 
 # Install node modules
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
 # Copy application code
