@@ -122,8 +122,6 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jsbundling-rails (1.3.1)
-      railties (>= 6.0.0)
     json (2.10.2)
     kamal (2.5.3)
       activesupport (>= 7.0)
@@ -357,25 +355,24 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  bootsnap
-  brakeman
-  capybara
-  debug
-  inertia_rails (~> 3.7)
-  jsbundling-rails
-  kamal
-  puma (>= 5.0)
+  bootsnap (= 1.18.4)
+  brakeman (= 7.0.0)
+  capybara (= 3.40.0)
+  debug (= 1.10.0)
+  inertia_rails (= 3.7.0)
+  kamal (= 2.5.3)
+  puma (= 6.6.0)
   rails (= 8.0.2)
-  rubocop-rails-omakase
-  selenium-webdriver
-  solid_cable
-  solid_cache
-  solid_queue
-  sqlite3 (>= 2.1)
-  thruster
-  tzinfo-data
-  vite_rails (~> 3.0)
-  web-console
+  rubocop-rails-omakase (= 1.1.0)
+  selenium-webdriver (= 4.30.1)
+  solid_cable (= 3.0.7)
+  solid_cache (= 1.0.7)
+  solid_queue (= 1.1.4)
+  sqlite3 (= 2.6.0)
+  thruster (= 0.1.12)
+  tzinfo-data (= 2.0.6)
+  vite_rails (= 3.0.19)
+  web-console (= 4.2.1)
 
 BUNDLED WITH
    2.6.6
