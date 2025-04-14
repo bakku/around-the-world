@@ -9,7 +9,7 @@ gem "solid_queue", "1.1.4"
 gem "solid_cable", "3.0.7"
 
 # Frontend
-gem "inertia_rails", "3.7.0"
+gem "inertia_rails", "3.8.0"
 gem "vite_rails", "3.0.19"
 
 # Deployment
