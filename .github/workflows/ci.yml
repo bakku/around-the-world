@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [ '**' ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Extract Node.js version from mise.toml
+      id: node-version
+      run: |
+        VERSION=$(grep -oP 'node = "\K[^"]+' mise.toml)
+        echo "node-version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ steps.node-version.outputs.node-version }}
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+
+    - name: Install dependencies
+      run: bun install
+
+    - name: Run check script
+      run: bun run check
+
+    - name: Run build script
+      run: bun run build
