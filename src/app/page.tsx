@@ -1,16 +1,9 @@
-import RecentGames from "@/components/RecentGames";
-import StartGame from "@/components/StartGame";
+import RecentRooms from "./_components/RecentRooms";
+import CreateRoomButton from "./_components/CreateRoomButton";
 
 export default function Home() {
   return (
     <main className="container mx-auto max-w-3xl px-4 py-8 flex flex-col gap-8">
-      {/*{errors && (*/}
-      {/*  <Alert variant="destructive">*/}
-      {/*    <AlertTitle>An error occurred</AlertTitle>*/}
-      {/*    <AlertDescription>Your game could not be created. Please try again later</AlertDescription>*/}
-      {/*  </Alert>*/}
-      {/*)}*/}
-
       <div className="flex flex-col gap-2">
         <h1 className="text-4xl font-bold text-center mb-2">
           Around the World
@@ -27,14 +20,23 @@ export default function Home() {
             <li>Start at number 1 and work your way up to 20</li>
             <li>Hit each number once to proceed to the next number</li>
             <li>The goal is to complete the game as quickly as possible</li>
-            <li>Track your progress and high scores using the unique link</li>
+            <li>Track your progress and high scores</li>
           </ul>
         </div>
 
-        <StartGame />
+        <div className="bg-muted rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Create a new room</h2>
+          <p className="text-muted-foreground mb-4">
+            No account needed! Just click below to create a new room. You&#39;ll
+            get a unique link to bookmark so you can return to view and improve
+            your scores anytime.
+          </p>
+
+          <CreateRoomButton />
+        </div>
       </div>
 
-      <RecentGames />
+      <RecentRooms />
     </main>
   );
 }
