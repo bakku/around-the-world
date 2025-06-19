@@ -7,7 +7,8 @@ export default function RoomNotFound() {
       <div className="bg-card rounded-lg border shadow-sm p-8">
         <h1 className="text-2xl font-semibold mb-4">Room Not Found</h1>
         <p className="text-muted-foreground mb-6">
-          Sorry, we couldn&apos;t find the room you&apos;re looking for. It may have been deleted or the link might be incorrect.
+          Sorry, we couldn&apos;t find the room you&apos;re looking for. It may
+          have been deleted or the link might be incorrect.
         </p>
         <Button asChild>
           <Link href="/" className="inline-flex items-center">

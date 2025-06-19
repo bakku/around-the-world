@@ -26,11 +26,14 @@ export function addRecentRoom(roomId: string) {
   }
   // Sort by lastVisited descending
   rooms = rooms
-    .sort((a, b) => new Date(b.lastVisited).getTime() - new Date(a.lastVisited).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.lastVisited).getTime() - new Date(a.lastVisited).getTime(),
+    )
     .slice(0, MAX_RECENT_ROOMS);
   localStorage.setItem(RECENT_ROOMS_KEY, JSON.stringify(rooms));
 }
 
 export function clearRecentRooms() {
   localStorage.removeItem(RECENT_ROOMS_KEY);
-} 
+}

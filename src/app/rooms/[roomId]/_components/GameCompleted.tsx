@@ -6,7 +6,10 @@ interface GameCompletedProps {
   onStartNewGame: () => void;
 }
 
-export default function GameCompleted({ throws, onStartNewGame }: GameCompletedProps) {
+export default function GameCompleted({
+  throws,
+  onStartNewGame,
+}: GameCompletedProps) {
   return (
     <div className="mb-6">
       <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
@@ -31,4 +34,4 @@ export default function GameCompleted({ throws, onStartNewGame }: GameCompletedP
       </div>
     </div>
   );
-} 
+}
