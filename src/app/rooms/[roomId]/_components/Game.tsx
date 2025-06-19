@@ -3,8 +3,8 @@
 import { useState, useMemo, useEffect, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Target, X, RefreshCw, CheckCircle, Copy } from "lucide-react";
-import { RecentRoom, RoomWithGamesWithThrows } from "@/lib/types";
+import { Copy } from "lucide-react";
+import { RoomWithGamesWithThrows } from "@/lib/types";
 import { saveGame } from "../_lib/actions";
 import { UnpersistedThrow } from "../_lib/types";
 import RecentScores from "./RecentScores";

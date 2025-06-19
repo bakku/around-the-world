@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 import { getRecentRooms } from "@/lib/localStorage";
 import Link from "next/link";
@@ -13,7 +12,6 @@ interface RecentRoom {
 
 export default function RecentRooms() {
   const [recentRooms, setRecentRooms] = useState<RecentRoom[]>([]);
-  const router = useRouter();
 
   useEffect(() => {
     setRecentRooms(getRecentRooms());
