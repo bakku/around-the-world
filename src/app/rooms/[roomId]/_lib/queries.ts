@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { roomsTable } from "@/db/schema";
 
 export async function getRoom(roomId: string) {
-  return await db.query.roomsTable.findFirst({
+  return await db().query.roomsTable.findFirst({
     with: {
       games: {
         with: {
