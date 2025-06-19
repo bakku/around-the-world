@@ -23,9 +23,7 @@ export default function GameOngoing({
       <div className="flex justify-center mb-4">
         <div className="relative w-40 h-40 flex flex-col items-center justify-center">
           <div className="absolute inset-0 bg-primary/10 rounded-full animate-pulse" />
-          <div className="text-7xl font-bold text-primary">
-            {currentNumber}
-          </div>
+          <div className="text-7xl font-bold text-primary">{currentNumber}</div>
         </div>
       </div>
 
@@ -71,4 +69,4 @@ export default function GameOngoing({
       </div>
     </div>
   );
-} 
+}
