@@ -1,18 +1,12 @@
 import { Globe } from "lucide-react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/sonner";
 import "@/styles/globals.css";
 import Providers from "./_components/Providers";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -32,9 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.className} antialiased`}>
         <Providers>
           <div className="min-h-screen flex flex-col">
             <header className="border-b bg-background">
@@ -62,10 +54,10 @@ export default function RootLayout({
                   </a>{" "}
                   and{" "}
                   <a
-                    href="https://aider.chat/"
+                    href="https://cursor.com/"
                     className="underline underline-offset-4"
                   >
-                    aider
+                    cursor
                   </a>{" "}
                   in Upper Palatine.
                 </p>
