@@ -6,10 +6,11 @@ import type { Metadata } from "next";
 export async function generateMetadata({
   params,
 }: {
-  params: { roomId: string };
+  params: Promise<{ roomId: string }>;
 }): Promise<Metadata> {
+  const { roomId } = await params;
   return {
-    title: `Room ${params.roomId}`,
+    title: `Room ${roomId}`,
   };
 }
 
