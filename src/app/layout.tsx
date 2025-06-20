@@ -17,8 +17,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Around the World",
-  description: "Travel experience platform",
+  title: {
+    default: "Around the World",
+    template: "%s | Around the World",
+  },
+  description:
+    'Play the darts game "Around the World", track your scores and see how you improve yourself over time',
 };
 
 export default function RootLayout({

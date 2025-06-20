@@ -1,6 +1,10 @@
 import RecentRooms from "./_components/RecentRooms";
 import CreateRoomButton from "./_components/CreateRoomButton";
 
+export const metadata = {
+  title: "Start | Around the World",
+};
+
 export default function Home() {
   return (
     <main className="container mx-auto max-w-3xl px-4 py-8 flex flex-col gap-8">
