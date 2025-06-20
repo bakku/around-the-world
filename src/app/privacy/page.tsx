@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Privacy Policy",
+};
+
 export default function PrivacyPage() {
   return (
     <main className="container mx-auto p-4">

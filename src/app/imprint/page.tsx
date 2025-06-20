@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Imprint",
+};
+
 export default function ImprintPage() {
   return (
     <main className="container mx-auto p-4">
