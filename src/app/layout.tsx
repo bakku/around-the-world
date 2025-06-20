@@ -1,7 +1,7 @@
+import { Globe } from "lucide-react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
-import { Globe } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import "@/styles/globals.css";
 import Providers from "./_components/Providers";

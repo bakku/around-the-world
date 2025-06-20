@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface GameCompletedProps {
   throws: number;

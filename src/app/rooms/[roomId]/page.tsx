@@ -1,7 +1,7 @@
-import { notFound } from "next/navigation";
-import Game from "@/app/rooms/[roomId]/_components/Game";
-import { getRoom } from "@/app/rooms/[roomId]/_lib/queries";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Game from "./_components/Game";
+import { getRoom } from "./_lib/queries";
 
 export async function generateMetadata({
   params,

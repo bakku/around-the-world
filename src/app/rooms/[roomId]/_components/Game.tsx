@@ -1,17 +1,17 @@
 "use client";
 
-import { useState, useMemo, useEffect, useTransition } from "react";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { Copy } from "lucide-react";
+import { useEffect, useMemo, useState, useTransition } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { addRecentRoom } from "@/lib/localStorage";
 import { RoomWithGamesWithThrows } from "@/lib/types";
 import { saveGame } from "../_lib/actions";
 import { UnpersistedThrow } from "../_lib/types";
-import RecentScores from "./RecentScores";
-import RecentScoresSkeleton from "@/app/rooms/[roomId]/_components/RecentScoresSkeleton";
 import GameCompleted from "./GameCompleted";
 import GameOngoing from "./GameOngoing";
-import { addRecentRoom } from "@/lib/localStorage";
+import RecentScores from "./RecentScores";
+import RecentScoresSkeleton from "./RecentScoresSkeleton";
 
 async function copyLinkToClipboard() {
   await navigator.clipboard.writeText(window.location.href);

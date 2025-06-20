@@ -1,9 +1,9 @@
 "use server";
 
-import { UnpersistedThrow } from "./types";
+import { revalidatePath } from "next/cache";
 import db from "@/db";
 import { gamesTable, throwsTable } from "@/db/schema";
-import { revalidatePath } from "next/cache";
+import { UnpersistedThrow } from "./types";
 
 export async function saveGame(roomId: string, throws: UnpersistedThrow[]) {
   await db().transaction(async (tx) => {
