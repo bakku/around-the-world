@@ -1,5 +1,5 @@
-import RecentRooms from "./_components/RecentRooms";
 import CreateRoomButton from "./_components/CreateRoomButton";
+import RecentRooms from "./_components/RecentRooms";
 
 export const metadata = {
   title: "Start | Around the World",
