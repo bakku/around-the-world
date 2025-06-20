@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { formatDate } from "@/lib/utils";
-import { getRecentRooms } from "@/lib/localStorage";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { getRecentRooms } from "@/lib/localStorage";
+import { formatDate } from "@/lib/utils";
 
 interface RecentRoom {
   roomId: string;

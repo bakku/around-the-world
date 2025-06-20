@@ -1,5 +1,5 @@
+import { RefreshCw, Target, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Target, X, RefreshCw } from "lucide-react";
 
 interface GameOngoingProps {
   currentNumber: number;

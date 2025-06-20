@@ -1,5 +1,5 @@
-import db from "@/db";
 import { eq } from "drizzle-orm";
+import db from "@/db";
 import { roomsTable } from "@/db/schema";
 
 export async function getRoom(roomId: string) {
