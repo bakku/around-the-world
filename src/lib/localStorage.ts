@@ -37,3 +37,12 @@ export function addRecentRoom(roomId: string) {
 export function clearRecentRooms() {
   localStorage.removeItem(RECENT_ROOMS_KEY);
 }
+
+export function removeRecentRoom(roomId: string) {
+  try {
+    const rooms = getRecentRooms().filter((room) => room.roomId !== roomId);
+    localStorage.setItem(RECENT_ROOMS_KEY, JSON.stringify(rooms));
+  } catch {
+    // ignore
+  }
+}

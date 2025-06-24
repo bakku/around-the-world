@@ -1,8 +1,10 @@
 "use client";
 
+import { ExternalLink, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getRecentRooms } from "@/lib/localStorage";
+import { Button } from "@/components/ui/button";
+import { getRecentRooms, removeRecentRoom } from "@/lib/localStorage";
 import { formatDate } from "@/lib/utils";
 
 interface RecentRoom {
@@ -17,6 +19,13 @@ export default function RecentRooms() {
     setRecentRooms(getRecentRooms());
   }, []);
 
+  const handleDelete = (e: React.MouseEvent, roomId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    removeRecentRoom(roomId);
+    setRecentRooms(getRecentRooms());
+  };
+
   if (recentRooms.length === 0) {
     return null;
   }
@@ -29,20 +38,33 @@ export default function RecentRooms() {
       </p>
       <div className="space-y-4">
         {recentRooms.map((room, index) => (
-          <Link
+          <div
             key={room.roomId}
-            href={`/rooms/${room.roomId}`}
-            className="w-full text-left flex items-center justify-between p-4 border rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+            className="w-full text-left flex items-center p-4 border rounded-lg bg-muted/50"
           >
-            <div>
+            <div className="flex-1">
               <div className="font-medium">Room {index + 1}</div>
-            </div>
-            <div className="flex flex-col items-end">
-              <div className="text-sm">
+              <div className="text-sm text-muted-foreground">
                 Last played: {formatDate(new Date(room.lastVisited))}
               </div>
             </div>
-          </Link>
+
+            <div className="flex gap-2">
+              <Button asChild variant="outline" size="icon">
+                <Link href={`/rooms/${room.roomId}`}>
+                  <ExternalLink className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={(e) => handleDelete(e, room.roomId)}
+                aria-label={`Delete Room ${index + 1}`}
+              >
+                <Trash2Icon className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
         ))}
       </div>
     </div>
