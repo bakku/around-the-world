@@ -18,15 +18,15 @@ export default function CreateRoomButton() {
   return (
     <>
       <Button
-        className="w-full"
-        type="submit"
+        className="w-full lg:w-auto"
+        size="lg"
         disabled={isPending}
         onClick={() =>
           startTransition(async () => await createRoomAndRedirect())
         }
       >
         {isPending ? <Loader2Icon className="animate-spin" /> : null}
-        Create New Room
+        Start Playing
       </Button>
     </>
   );
