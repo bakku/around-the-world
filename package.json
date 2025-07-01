@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "check": "tsc --pretty --noEmit && next lint"
+    "check": "tsc --pretty --noEmit && next lint",
+    "migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@bprogress/next": "3.2.12",
