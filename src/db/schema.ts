@@ -6,6 +6,7 @@ export const roomsTable = sqliteTable("rooms", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => randomUUID()),
+  name: text("name"),
   createdAt: text("created_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
