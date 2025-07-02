@@ -9,9 +9,9 @@ FROM bun AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
+# Install all dependencies for build
 COPY package.json bun.lock ./
 RUN bun install
-
 
 # Rebuild the source code only when needed
 FROM bun AS builder
@@ -25,6 +25,12 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN bun run build
+
+# Install production dependencies only
+FROM bun AS prod-deps
+WORKDIR /app
+COPY package.json bun.lock ./
+RUN bun install --production
 
 # Production image, copy all the files and run next
 FROM node AS runner
@@ -43,7 +49,7 @@ COPY --from=builder /app/public ./public
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=prod-deps /app/node_modules ./node_modules
 
 # Copy migration related files
 COPY --from=builder --chown=nextjs:nodejs /app/drizzle ./drizzle
