@@ -4,9 +4,14 @@ import { Loader2Icon } from "lucide-react";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { createRoom } from "../_lib/actions";
 
-export default function CreateRoomButton() {
+export default function CreateRoomButton({
+  className,
+}: {
+  className?: string;
+}) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -18,7 +23,7 @@ export default function CreateRoomButton() {
   return (
     <>
       <Button
-        className="w-full lg:w-auto"
+        className={cn("w-full lg:w-auto", className)}
         size="lg"
         disabled={isPending}
         onClick={() =>
