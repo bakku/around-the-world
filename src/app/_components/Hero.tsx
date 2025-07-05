@@ -1,4 +1,5 @@
-import CreateRoomButton from "@/app/_components/CreateRoomButton";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   return (
@@ -16,7 +17,9 @@ export default function Hero() {
       </p>
 
       <div className="flex flex-col lg:flex-row justify-center gap-4">
-        <CreateRoomButton />
+        <Button asChild size="lg" className="w-full lg:w-auto">
+          <Link href="/rooms/new">Start Playing</Link>
+        </Button>
       </div>
     </div>
   );

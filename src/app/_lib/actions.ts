@@ -1,15 +1,28 @@
 "use server";
 
+import { z } from "zod/v4";
 import db from "@/db";
 import { roomsTable } from "@/db/schema";
 
-export async function createRoom() {
-  const result = await db()
+const RoomSchema = z.object({
+  name: z.string().trim().min(1, { error: "Name is required." }),
+});
+
+export async function createRoom(formData: FormData) {
+  const result = RoomSchema.safeParse({
+    name: formData.get("name"),
+  });
+
+  if (!result.success) {
+    return { error: z.flattenError(result.error) };
+  }
+
+  const createdRooms = await db()
     .insert(roomsTable)
     .values({
-      // TODO: Fill this with a proper name.
-      name: "",
+      ...result.data,
     })
     .returning();
-  return result[0].id;
+
+  return { roomId: createdRooms[0].id };
 }

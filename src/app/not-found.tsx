@@ -1,5 +1,4 @@
 import Link from "next/link";
-import CreateRoomButton from "@/app/_components/CreateRoomButton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,10 +11,10 @@ import {
 export default function NotFound() {
   return (
     <div className="h-full grow flex items-center justify-center px-4">
-      <Card className="lg:min-w-[30%] min-w-[80%]">
+      <Card className="xl:min-w-[30%] lg:min-w-[50%] min-w-[80%]">
         <CardHeader>
-          <CardTitle className="text-xl">Page not found</CardTitle>
-          <CardDescription className="text-md">
+          <CardTitle>Page not found</CardTitle>
+          <CardDescription>
             The page you were looking for does not exist. But why don&#39;t you
             go and play some darts?
           </CardDescription>
@@ -25,7 +24,9 @@ export default function NotFound() {
           <Button size="lg" variant="outline" className="flex-1" asChild>
             <Link href="/">Go Home</Link>
           </Button>
-          <CreateRoomButton className="flex-1" />
+          <Button size="lg" className="flex-1" asChild>
+            <Link href="/rooms/new">Start Playing</Link>
+          </Button>
         </CardFooter>
       </Card>
     </div>
