@@ -11,6 +11,7 @@ export type RoomWithGamesWithThrows = Room & {
 };
 
 export type RecentRoom = {
-  roomId: string;
+  id: string;
+  name: string;
   lastVisited: string;
 };

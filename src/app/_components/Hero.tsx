@@ -16,8 +16,8 @@ export default function Hero() {
         .
       </p>
 
-      <div className="flex flex-col lg:flex-row justify-center gap-4">
-        <Button asChild size="lg" className="w-full lg:w-auto">
+      <div className="flex justify-center">
+        <Button asChild size="lg" className="flex-1 md:flex-none">
           <Link href="/rooms/new">Start Playing</Link>
         </Button>
       </div>
