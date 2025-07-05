@@ -25,8 +25,8 @@ export default function Game({ room }: { room: RoomWithGamesWithThrows }) {
   const [throws, setThrows] = useState<UnpersistedThrow[]>([]);
 
   useEffect(() => {
-    addRecentRoom(room.id);
-  }, [room.id]);
+    addRecentRoom(room.id, room.name);
+  });
 
   const currentNumber = useMemo(() => {
     const reverseHitThrows = throws

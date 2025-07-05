@@ -4,19 +4,20 @@ import { Loader2Icon } from "lucide-react";
 import { z } from "zod/v4";
 import React from "react";
 import { useActionState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createRoom } from "@/app/_lib/actions";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getRecentRooms } from "@/lib/localStorage";
+import { createRoom } from "../_lib/actions";
 
 type FormActionState = {
   error?: ReturnType<typeof z.flattenError>;
@@ -31,11 +32,14 @@ export default function CreateRoomForm() {
 
       if (result.error) return result;
 
-      router.push(`/rooms/${result.roomId}`);
+      router.push(`/rooms/${result.roomId}`, { scroll: true });
+
       return { error: undefined };
     },
     { error: undefined },
   );
+
+  const recentRooms = getRecentRooms();
 
   return (
     <Card className="w-full max-w-md">
@@ -65,18 +69,26 @@ export default function CreateRoomForm() {
               </div>
             )}
           </div>
-          <CardFooter className="px-0">
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={pending}
-              size="lg"
-            >
-              {pending ? <Loader2Icon className="animate-spin mr-2" /> : null}
-              Create Room
-            </Button>
-          </CardFooter>
+
+          <Button type="submit" className="w-full" disabled={pending} size="lg">
+            {pending ? <Loader2Icon className="animate-spin mr-2" /> : null}
+            Create Room
+          </Button>
         </form>
+
+        {recentRooms.length > 0 && (
+          <>
+            <div className="flex items-center my-4 gap-1">
+              <div className="flex-grow border-t border-gray-300" />
+              <span className="text-muted-foreground text-sm">OR</span>
+              <div className="flex-grow border-t border-gray-300" />
+            </div>
+
+            <Button className="w-full" size="lg" asChild>
+              <Link href="/rooms/recent">View recently visited rooms</Link>
+            </Button>
+          </>
+        )}
       </CardContent>
     </Card>
   );

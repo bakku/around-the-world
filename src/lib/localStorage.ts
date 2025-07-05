@@ -15,14 +15,14 @@ export function getRecentRooms(): RecentRoom[] {
   }
 }
 
-export function addRecentRoom(roomId: string) {
+export function addRecentRoom(id: string, name: string) {
   const now = new Date().toISOString();
   let rooms = getRecentRooms();
-  const idx = rooms.findIndex((r) => r.roomId === roomId);
+  const idx = rooms.findIndex((r) => r.id === id);
   if (idx !== -1) {
     rooms[idx].lastVisited = now;
   } else {
-    rooms.unshift({ roomId, lastVisited: now });
+    rooms.unshift({ id, name, lastVisited: now });
   }
   // Sort by lastVisited descending
   rooms = rooms
@@ -34,13 +34,9 @@ export function addRecentRoom(roomId: string) {
   localStorage.setItem(RECENT_ROOMS_KEY, JSON.stringify(rooms));
 }
 
-export function clearRecentRooms() {
-  localStorage.removeItem(RECENT_ROOMS_KEY);
-}
-
-export function removeRecentRoom(roomId: string) {
+export function removeRecentRoom(id: string) {
   try {
-    const rooms = getRecentRooms().filter((room) => room.roomId !== roomId);
+    const rooms = getRecentRooms().filter((room) => room.id !== id);
     localStorage.setItem(RECENT_ROOMS_KEY, JSON.stringify(rooms));
   } catch {
     // ignore
