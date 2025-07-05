@@ -1,6 +1,8 @@
+import React from "react";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import Footer from "./_components/Footer";
 import Navbar from "./_components/Navbar";
@@ -26,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={cn(geistSans.className, "antialiased")}>
         <Providers>
           <div className="min-h-screen flex flex-col">
             <Navbar />
