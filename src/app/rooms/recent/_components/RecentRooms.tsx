@@ -22,10 +22,10 @@ export default function RecentRooms() {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {recentRooms.map((room) => (
         <RecentRoom key={room.id} room={room} onDelete={handleDelete} />
       ))}
-    </>
+    </div>
   );
 }
