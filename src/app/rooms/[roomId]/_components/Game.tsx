@@ -50,7 +50,7 @@ export default function Game({ room }: { room: RoomWithGamesWithThrows }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentNumber]);
 
-  const gameFinished = useMemo(() => currentNumber > 20, [currentNumber]);
+  const gameFinished = currentNumber > 20;
 
   const bestScore = useMemo(() => {
     if (room.games.length === 0) return null;
