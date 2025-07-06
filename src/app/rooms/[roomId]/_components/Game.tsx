@@ -4,7 +4,7 @@ import { Copy } from "lucide-react";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { addRecentRoom } from "@/lib/localStorage";
+import { addRecentRoom, updateRecentRoomTimestamp } from "@/lib/localStorage";
 import { RoomWithGamesWithThrows } from "@/lib/types";
 import { saveGame } from "../_lib/actions";
 import { UnpersistedThrow } from "../_lib/types";
@@ -39,7 +39,10 @@ export default function Game({ room }: { room: RoomWithGamesWithThrows }) {
 
   useEffect(() => {
     if (currentNumber > 20) {
-      startLoadingScoresTransition(async () => await saveGame(room.id, throws));
+      startLoadingScoresTransition(async () => {
+        await saveGame(room.id, throws);
+        updateRecentRoomTimestamp(room.id);
+      });
     }
     // `currentNumber` is being calculated when `throws` updates, so `throws`
     // shouldn't be tracked as useEffect dependencies. `room.id` is static for

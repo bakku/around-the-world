@@ -13,5 +13,5 @@ export type RoomWithGamesWithThrows = Room & {
 export type RecentRoom = {
   id: string;
   name: string;
-  lastVisited: string;
+  lastPlayed: string | null;
 };

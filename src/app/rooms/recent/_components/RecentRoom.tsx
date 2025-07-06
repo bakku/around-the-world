@@ -37,7 +37,11 @@ export default function RecentRoom({
           <div className="flex flex-col md:flex-row md:justify-between">
             <CardTitle>{room.name}</CardTitle>
             <CardDescription>
-              Last played: {formatDate(new Date(room.lastVisited))}
+              {room.lastPlayed ? (
+                <>Last played: {formatDate(new Date(room.lastPlayed))}</>
+              ) : (
+                <>No games played yet</>
+              )}
             </CardDescription>
           </div>
         </CardHeader>
