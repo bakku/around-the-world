@@ -7,70 +7,50 @@ import {
   MousePointerClick,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { doTimes, wait } from "@/lib/animations";
 
 export default function BookmarkExample() {
   const mousePointer = useRef<SVGSVGElement>(null);
 
-  const [styleRight, setStyleRight] = useState(-80);
   const [styleBottom, setStyleBottom] = useState(0);
-  const [roundsForClick, setRoundsForClick] = useState(0);
+  const [styleRight, setStyleRight] = useState(-80);
   const [showClick, setShowClick] = useState(false);
-  const [roundsForButtonSwitch, setRoundsForButtonSwitch] = useState(0);
   const [buttonSwitched, setButtonSwitched] = useState(false);
-  const [roundsForReset, setRoundsForReset] = useState(0);
 
-  function animate() {
-    if (styleBottom <= 30) {
-      setStyleBottom((prevState) => prevState + 1);
-      return;
-    }
+  async function animate() {
+    await doTimes(20, () => setStyleBottom((prevState) => prevState + 1), 30);
 
-    if (styleRight <= -50) {
-      setStyleRight((prevState) => prevState + 1);
-      return;
-    }
+    await doTimes(20, () => setStyleRight((prevState) => prevState + 1), 30);
 
-    if (roundsForClick <= 30) {
-      setRoundsForClick((prevState) => prevState + 1);
-      return;
-    }
+    await wait(600);
 
-    if (!showClick && !buttonSwitched) {
-      setShowClick(true);
-      return;
-    }
+    setShowClick(true);
 
-    if (roundsForButtonSwitch <= 5) {
-      setRoundsForButtonSwitch((prevState) => prevState + 1);
-      return;
-    }
+    await wait(100);
 
-    if (!buttonSwitched) {
-      setShowClick(false);
-      setButtonSwitched(true);
-      return;
-    }
+    setShowClick(false);
+    setButtonSwitched(true);
 
-    if (roundsForReset <= 300) {
-      setRoundsForReset((prevState) => prevState + 1);
-      return;
-    }
+    await wait(6000);
 
     // Reset animation.
     setStyleRight(-80);
     setStyleBottom(0);
-    setRoundsForClick(0);
     setShowClick(false);
-    setRoundsForButtonSwitch(0);
     setButtonSwitched(false);
-    setRoundsForReset(0);
+
+    return Promise.resolve();
+  }
+
+  function startAnimation() {
+    animate().then(startAnimation);
   }
 
   useEffect(() => {
-    const interval = setInterval(() => animate(), 20);
-
-    return () => clearInterval(interval);
-  });
+    startAnimation();
+    // This useEffect should only run on the first mount.
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className="flex flex-col gap-4 justify-center items-center w-full h-full">
