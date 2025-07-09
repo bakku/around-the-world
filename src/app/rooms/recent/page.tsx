@@ -1,5 +1,9 @@
 import RecentRooms from "@/app/rooms/recent/_components/RecentRooms";
 
+export const metadata = {
+  title: "Recent Rooms",
+};
+
 export default function Page() {
   return (
     <div className="px-4 py-8">
