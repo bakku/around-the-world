@@ -1,11 +1,11 @@
 "use client";
 
 import { Loader2Icon } from "lucide-react";
-import { z } from "zod/v4";
 import React from "react";
 import { useActionState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
